@@ -20,8 +20,6 @@ import java.net.Socket
 
 class LocationDetection : AppCompatActivity() {
     private lateinit var wifiManager: WifiManager
-    private lateinit var wifiReceiver: BroadcastReceiver
-    private val handler = Handler(Looper.getMainLooper())
 
     private val TAG = "TCPServer"
     private val time_slice:Long = 500
@@ -79,12 +77,12 @@ class LocationDetection : AppCompatActivity() {
                 val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
 
                 while (true){
-                    writer.write("#1")
-
+                    writer.write("1")
                     // 컴퓨터로 데이터 송신
                     val response = wifiData()
-                    writer.write("${response.length}")
+                    writer.write("#${response.length}")
                     writer.flush()
+
                     writer.write(response)
                     writer.flush()
                     Log.d(TAG, "Send Data to PC : ${response.length}")

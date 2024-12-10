@@ -11,18 +11,36 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Environment
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.BufferedReader
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
+import java.io.InputStreamReader
+import java.io.OutputStream
+import java.io.OutputStreamWriter
+import java.net.Socket
 
 class RegisterNewLocation : AppCompatActivity() {
     private lateinit var wifiManager: WifiManager
     private lateinit var wifiReceiver: BroadcastReceiver
     private val handler = Handler(Looper.getMainLooper())
+
+    private val TAG = "TCPServer"
+    private lateinit var file_name : String
+    private lateinit var file :File
+    private lateinit var socket: Socket
+    private var serverJob: Job? = null
 
     // 데이터 저장 위치 설정
     val folderName = "iotSensingDataSave"
@@ -55,7 +73,6 @@ class RegisterNewLocation : AppCompatActivity() {
         var count = 0
 
         // 센싱 데이터 저장을 위해
-        lateinit var file :File
         lateinit var fileWriter: FileWriter
 
         val regiButton: Button = findViewById(R.id.registration)// 등록 버튼 객체 선언
@@ -107,11 +124,15 @@ class RegisterNewLocation : AppCompatActivity() {
                         //sampelingRate 밀리 초 마다 반복 하도록
                         fileWriter.append("],\n")
                         handler.postDelayed(this, sampelingRate)
-                    } else {
+                    } else { //파일 작성 완료
                         fileWriter.append("]]")
                         fileWriter.flush()
                         fileWriter.close()
                         regiButton.isEnabled = true
+
+                        serverJob = CoroutineScope(Dispatchers.IO).launch {
+                            sendText("125.177.165.67",9800)
+                        }
                     }
                 }catch(e: IOException){
                     //파일을 열고, 닫는 과정에서 문제가 발생함
@@ -128,6 +149,7 @@ class RegisterNewLocation : AppCompatActivity() {
                 file = File(customDir, dataName.text.toString()+".txt")
                 fileWriter  = FileWriter(file, false)
                 fileWriter.append("[")
+                file_name = dataName.text.toString()+".txt"
                 handler.post(updateWifiInfo)
             }
 
@@ -138,6 +160,8 @@ class RegisterNewLocation : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         // 리시버 해제
+        socket?.close()
+        serverJob?.cancel()
         unregisterReceiver(wifiReceiver)
     }
 
@@ -145,5 +169,33 @@ class RegisterNewLocation : AppCompatActivity() {
         super.onBackPressed()
         finish()
         startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    private suspend fun sendText(serverIp:String, port: Int){
+        withContext(Dispatchers.IO) {
+            try {
+                socket = Socket(serverIp, port)
+                val outputStream: OutputStream = socket.getOutputStream()
+                val writer = OutputStreamWriter(socket.getOutputStream())
+
+                writer.write("0")
+
+                // 컴퓨터로 데이터 송신
+                writer.write("#${file_name}")
+                writer.flush()
+
+
+                file.inputStream().use { inputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+                Log.d(TAG, "Send text file")
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error in server: ${e.message}")
+            } finally {
+                socket?.close()
+                serverJob?.cancel()
+            }
+        }
     }
 }
