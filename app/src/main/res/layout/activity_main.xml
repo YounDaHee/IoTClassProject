@@ -7,112 +7,23 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/registration"
+        android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="registration"
+        android:layout_marginTop="250dp"
+        android:text="Register a new location"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.93"
-        app:layout_constraintStart_toEndOf="@+id/dataName"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <EditText
-        android:id="@+id/dataName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="position name"
-
-        android:inputType="text"
-        app:layout_constraintEnd_toStartOf="@+id/registration"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/Count"
+    <Button
+        android:id="@+id/detection"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:text="Counting : "
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dataName" />
-
-    <TextView
-        android:id="@+id/CountNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="32dp"
-
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-
-        app:layout_constraintTop_toBottomOf="@+id/dataName"
-        app:layout_constraintStart_toEndOf="@+id/Count"
-        />
-
-    <TextView
-        android:id="@+id/Total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total AP : "
-        tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="32dp"
-
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-
-        app:layout_constraintTop_toBottomOf="@+id/dataName"
-        app:layout_constraintStart_toEndOf="@+id/CountNum"
-        />
-
-    <TextView
-        android:id="@+id/TotalNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="32dp"
-
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-
-        app:layout_constraintTop_toBottomOf="@+id/dataName"
-        app:layout_constraintStart_toEndOf="@+id/Total"
-        />
-
-    <ScrollView
-        android:id="@+id/ScrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/Total"
+        android:layout_height="48dp"
+        android:text="Location detection"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-
-        android:layout_marginTop="10dp"
-        >
-
-        <TextView
-            android:id="@+id/allDataSet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="[SSID] [MAC addr] : RSSI"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </ScrollView>
-
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/register"
+        app:layout_constraintVertical_bias="0.110000014" />
 </androidx.constraintlayout.widget.ConstraintLayout>
