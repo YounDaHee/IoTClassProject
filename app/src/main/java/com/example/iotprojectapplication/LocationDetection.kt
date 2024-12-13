@@ -34,7 +34,7 @@ class LocationDetection : AppCompatActivity() {
 
         // 코루틴을 사용해 별도 스레드에서 서버 소켓 시작
         serverJob = CoroutineScope(Dispatchers.IO).launch {
-            startTcp("125.177.165.67",9800)
+            startTcp("서버 ",9800)
         }
     }
 
