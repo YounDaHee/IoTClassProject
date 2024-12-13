@@ -131,7 +131,7 @@ class RegisterNewLocation : AppCompatActivity() {
                         regiButton.isEnabled = true
 
                         serverJob = CoroutineScope(Dispatchers.IO).launch {
-                            sendText("125.177.165.67",9800)
+                            sendText("서버 ip 주소",9800)
                         }
                     }
                 }catch(e: IOException){
